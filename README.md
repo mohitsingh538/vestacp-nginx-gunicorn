@@ -25,11 +25,7 @@ rm -rf gunicorn gunicorn.zip
 cd /home/admin/web/{your-domain.com}/private/ && \
 mkdir {your-domain.com}
 ```
-And upload your project project inside this folder. So your 
-```bash
-/home/admin/web/your-domain.com/private
-``` 
-folder should look like:
+And upload your project project inside this folder. So your ``` /home/admin/web/your-domain.com/private/ ``` folder should look like:
 ```
 |-- your-domain.com
     |-- manage.py
