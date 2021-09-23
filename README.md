@@ -20,12 +20,28 @@ unzip gunicorn.zip && \
 mv gunicorn/* . && \
 rm -rf gunicorn gunicorn.zip
 ```
+
+Create a file **proxy_params** inside ``/etc/nginx`` 
+```bash
+vi /etc/nginx/proxy_params
+```
+```bash
+proxy_set_header Host $http_host;
+proxy_set_header X-Real-IP $remote_addr;
+proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+proxy_set_header X-Forwarded-Proto $scheme;
+```
+
 #### Create a folder that goes by the name of your domain
 ```bash
 cd /home/admin/web/{your-domain.com}/private/ && \
 mkdir {your-domain.com}
 ```
-And upload your project project inside this folder. So your ``` /home/admin/web/your-domain.com/private/ ``` folder should look like:
+And upload your project project inside this folder. So your 
+```bash
+/home/admin/web/your-domain.com/private
+``` 
+folder should look like:
 ```
 |-- your-domain.com
     |-- manage.py
