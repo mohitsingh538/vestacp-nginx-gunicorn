@@ -15,7 +15,7 @@ Select Nginx + php-fpm from advanced settings
 Login as root and run this to download template files in php-fpm templates folder:
 ```bash
 cd /usr/local/vesta/data/templates/web/nginx/php-fpm/ && \
-wget https://github.com/mohitsingh538/vestacp-nginx-gunicorn/raw/main/gunicorn.zip
+wget https://github.com/mohitsingh538/vestacp-nginx-gunicorn/raw/main/gunicorn.zip && \
 unzip gunicorn.zip && \
 mv gunicorn/* . && \
 rm -rf gunicorn gunicorn.zip
