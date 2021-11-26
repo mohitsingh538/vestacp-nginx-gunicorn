@@ -71,10 +71,10 @@ virtualenv venv
 source venv/bin/activate
 ```
 
-#### Download Gunicorn
+#### Download Gunicorn and Gevent
 
 ```bash
-pip install gunicorn
+pip install gunicorn gevent
 ```
 ```bash
 gunicorn --bind 0.0.0.0:8000 your-app-name.wsgi
@@ -93,6 +93,56 @@ Quit the server with CONTROL-C.
 Select django_nginx from the list of web templates and save
 
 ![Vesta CP Template](https://github.com/mohitsingh538/vestacp-nginx-gunicorn/raw/main/images/vesta-template.png)
+
+Create a Systemd Service file for Gunicorn
+
+```
+vi /etc/systemd/system/gunicorn.service
+```
+and paste the following. Please change the path according to your domain and app name.
+
+```bash
+[Unit]
+Description=gunicorn daemon
+Requires=gunicorn.socket
+After=network.target
+[Service]
+PIDFile=/run/gunicorn/pid
+User=admin
+Group=www-data
+WorkingDirectory=/home/admin/web/your-domain.com/private/your-domain.com
+ExecStart=/home/admin/web/your-domain.com/private/venv/bin/gunicorn --access-logfile - --workers 5 -k "gevent" --timeout 60 --bind unix:/home/admin/web/your-domain.com/private/gunicorn.sock you-app-name.wsgi:application
+ExecReload=/bin/kill -s HUP $MAINPID
+ExecStop=/bin/kill -s TERM $MAINPID
+PrivateTmp=true
+[Install]
+WantedBy=multi-user.target
+```
+
+and then, create gunicorn.socket file
+
+```
+vi /etc/systemd/system/gunicorn.socket
+```
+
+Add:
+
+```bash
+[Unit]
+Description=gunicorn socket
+
+[Socket]
+ListenStream=/home/admin/web/your-domain/private/gunicorn.sock
+
+[Install]
+WantedBy=sockets.target
+```
+Then,
+
+```bash
+systemctl start gunicorn
+systemctl enable gunicorn
+```
 
 Finally, restart the Nginx service to apply the changes:
 
